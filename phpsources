@@ -1,0 +1,9 @@
+##sources.list
+deb http://mirrors.digitalocean.com/debian jessie main contrib non-free
+deb-src http://mirrors.digitalocean.com/debian jessie main contrib non-free
+
+deb-src http://security.debian.org/ jessie/updates main contrib non-free
+
+# jessie-updates, previously known as 'volatile'
+deb http://mirrors.digitalocean.com/debian jessie-updates main contrib non-free
+deb-src http://mirrors.digitalocean.com/debian jessie-updates main contrib non-free
