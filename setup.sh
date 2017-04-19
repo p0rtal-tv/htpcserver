@@ -18,6 +18,7 @@ chmod 0644 ~/.ssh/authorized_keys
 apt-get update
 apt-get upgrade -y
 apt-get dist-upgrade -y
+apt-get install sudo 
 
 ######
 ##Add Repos & Keys
@@ -26,18 +27,24 @@ sudo apt-key adv --keyserver hkp://keyserver.ubuntu.com:80 --recv-keys 3FA7E0328
 echo "deb http://download.mono-project.com/repo/debian wheezy main" | sudo tee /etc/apt/sources.list.d/mono-xamarin.list
 sudo apt-key adv --keyserver keyserver.ubuntu.com --recv-keys FDA5DFFC
 echo "deb http://apt.sonarr.tv/ master main" | sudo tee /etc/apt/sources.list.d/sonarr.list
+sudo apt-key adv --keyserver hkp://keyserver.ubuntu.com:80 --recv-keys 3FA7E0328081BFF6A14DA29AA6A19B38D3D831EF
+echo "deb http://download.mono-project.com/repo/debian wheezy main" | sudo tee /etc/apt/sources.list.d/mono-xamarin.list
+echo "deb http://download.mono-project.com/repo/debian wheezy-apache24-compat main" | sudo tee -a /etc/apt/sources.list.d/mono-xamarin.list
+echo "deb http://download.mono-project.com/repo/debian wheezy-libjpeg62-compat main" | sudo tee -a /etc/apt/sources.list.d/mono-xamarin.list
+
 
 ########
 ###Insall Dependencies
 #########
-apt get update 
-apt-get install -yqq sudo software-properties-common ufw mono-devel unzip zip libmono-cil-dev curl mediainfo nginx php5-fpm php5-mysql php5.0-sqlite fuse unionfs-fuse
+apt-get update 
+aptitude install -yqq software-properties-common ufw mono-devel unzip zip libmono-cil-dev curl mediainfo nginx php5-fpm php5-mysql php5-sqlite fuse unionfs-fuse
 
 #######
 ##Make Directories
 #######
-mkdir -p /home/{acd-movies,acd-tv,acd-kidsm,acd-kidstv,plex-movies-r,plex-kidsm-r,plex-tv-r,plex-kidstv-r,plextemp,movies,movies-kids,tv,tv-kids,scripts,scripts/logs}
-mkdir -p /home/{gdrive-movies,gdrive-tv,gdrive-kidsm,gdrive-kidstv}
+mkdir -p /cloud/{acd-movies,acd-tv,acd-kidsm,acd-kidstv,plex-movies-r,plex-kidsm-r,plex-tv-r,plex-kidstv-r,plextemp,movies,movies-kids,tv,tv-kids,scripts,scripts/logs}
+mkdir -p /cloud/{gdrive-movies,gdrive-tv,gdrive-kidsm,gdrive-kidstv}
+mkdir -p /downloads/{complete,incomplete,watch}
 
 ########
 ###Install Apps####
