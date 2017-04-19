@@ -37,7 +37,7 @@ echo "deb http://download.mono-project.com/repo/debian wheezy-libjpeg62-compat m
 ###Insall Dependencies
 #########
 apt-get update 
-aptitude install -yqq software-properties-common ufw mono-devel unzip zip libmono-cil-dev curl mediainfo nginx php5-fpm php5-mysql php5-sqlite fuse unionfs-fuse
+aptitude install -yqq git software-properties-common ufw mono-devel unzip zip libmono-cil-dev curl mediainfo nginx php5-fpm php5-mysql php5-sqlite fuse unionfs-fuse
 
 #######
 ##Make Directories
