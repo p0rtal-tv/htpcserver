@@ -51,14 +51,22 @@ mkdir -p /downloads/{complete,incomplete,watch}
 ########
 
 ##Plex
+cd /tmp
 bash -c "$(wget -qO - https://raw.githubusercontent.com/mrworf/plexupdate/master/extras/installer.sh)"
+
+####
+##Edit Plex User pw
+####
+passwd plex
+usermod -aG sudo plex
+
 
 ##Trakt.tv Plugin
 wget https://github.com/trakt/Plex-Trakt-Scrobbler/archive/master.zip -O Plex-Trakt-Scrobbler.zip
 unzip Plex-Trakt-Scrobbler.zip && rm -f Plex-Trakt-Scrobbler.zip
-sudo systemctl stop plexmediaserver
+systemctl stop plexmediaserver
 cp -r Plex-Trakt-Scrobbler-*/Trakttv.bundle "/var/lib/plexmediaserver/Library/Application Support/Plex Media Server/Plug-ins/"
-sudo systemctl start plexmediaserver
+systemctl start plexmediaserver
 
 ##PlexRequests
 cd /tmp
@@ -91,6 +99,15 @@ git clone https://github.com/JonnyWong16/plexpy.git
 cd /var/www
 sudo git clone https://github.com/causefx/Organizr
 chown -R www-data:www-data /var/www/Organizr
+
+####
+##Permissions
+chown -R plex:plex /opt
+chown -R plex:plex /downloads
+chown -R plex:plex /cloud
+chmod -R 755 /opt
+chmod -R 755 /downloads
+chmod -R 755 /opt
 
 ##rclone
 cd /tmp
