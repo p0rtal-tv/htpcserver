@@ -73,7 +73,7 @@ cd /tmp
 wget https://github.com/tidusjar/Ombi/releases/download/v2.2.1/Ombi.zip
 unzip Ombi.zip && rm -f Ombi.zip
 mkdir -p /opt/Ombi
-mv /Ombi/Release/* /opt/Ombi
+mv Release/* /opt/Ombi
 
 ##Sonarr
 apt-get install nzbdrone
@@ -111,9 +111,9 @@ chmod -R 755 /opt
 
 ##rclone
 cd /tmp
-curl -O http://downloads.rclone.org/rclone-current-linux-amd64.zip
+wget http://downloads.rclone.org/rclone-current-linux-amd64.zip
 unzip rclone-current-linux-amd64.zip && rm -f rclone-current-linux-amd64.zip
-cd rclon-*-linux-amd64
+cd rclone-*-linux-amd64
 sudo cp rclone /usr/bin/
 sudo chown root:root /usr/bin/rclone
 sudo chmod 755 /usr/bin/rclone
