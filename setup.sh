@@ -1,24 +1,9 @@
 ######
-##Edit SSH Port
-######
-nano /etc/ssh/sshd_config
-sudo systemctl restart sshd
-
-#######
-###Upload Public Key
-######
-mkdir ~/.ssh
-chmod 0700 ~/.ssh
-touch ~/.ssh/authorized_keys
-chmod 0644 ~/.ssh/authorized_keys
-
-######
 ##Update
 ######
 apt-get update
 apt-get upgrade -y
 apt-get dist-upgrade -y
-apt-get install sudo 
 
 ######
 ##Add Repos & Keys
@@ -27,24 +12,18 @@ sudo apt-key adv --keyserver hkp://keyserver.ubuntu.com:80 --recv-keys 3FA7E0328
 echo "deb http://download.mono-project.com/repo/debian wheezy main" | sudo tee /etc/apt/sources.list.d/mono-xamarin.list
 sudo apt-key adv --keyserver keyserver.ubuntu.com --recv-keys FDA5DFFC
 echo "deb http://apt.sonarr.tv/ master main" | sudo tee /etc/apt/sources.list.d/sonarr.list
-sudo apt-key adv --keyserver hkp://keyserver.ubuntu.com:80 --recv-keys 3FA7E0328081BFF6A14DA29AA6A19B38D3D831EF
-echo "deb http://download.mono-project.com/repo/debian wheezy main" | sudo tee /etc/apt/sources.list.d/mono-xamarin.list
-echo "deb http://download.mono-project.com/repo/debian wheezy-apache24-compat main" | sudo tee -a /etc/apt/sources.list.d/mono-xamarin.list
-echo "deb http://download.mono-project.com/repo/debian wheezy-libjpeg62-compat main" | sudo tee -a /etc/apt/sources.list.d/mono-xamarin.list
-
 
 ########
 ###Insall Dependencies
 #########
 apt-get update 
-aptitude install -yqq git software-properties-common ufw mono-devel unzip zip libmono-cil-dev curl mediainfo nginx php5-fpm php5-mysql php5-sqlite fuse unionfs-fuse
+aptitude install -y git software-properties-common mono-devel unzip zip libmono-cil-dev curl mediainfo nginx php7.0-fpm php7.0-mysql php7.0-sqlite fuse unionfs-fuse
 
 #######
 ##Make Directories
 #######
-mkdir -p /cloud/{acd-movies,acd-tv,acd-kidsm,acd-kidstv,plex-movies-r,plex-kidsm-r,plex-tv-r,plex-kidstv-r,plextemp,movies,movies-kids,tv,tv-kids,scripts,scripts/logs}
-mkdir -p /cloud/{gdrive-movies,gdrive-tv,gdrive-kidsm,gdrive-kidstv}
-mkdir -p /downloads/{complete,incomplete,watch}
+mkdir -p /down/{complete,incomplete,watch}
+mkdir -p /plex/{movies,tv,kidstv,kidsmovies,music}
 
 ########
 ###Install Apps####
@@ -69,7 +48,6 @@ cp -r Plex-Trakt-Scrobbler-*/Trakttv.bundle "/var/lib/plexmediaserver/Library/Ap
 systemctl start plexmediaserver
 
 ##PlexRequests
-cd /tmp
 wget https://github.com/tidusjar/Ombi/releases/download/v2.2.1/Ombi.zip
 unzip Ombi.zip && rm -f Ombi.zip
 mkdir -p /opt/Ombi
@@ -87,7 +65,6 @@ tar -xvzf Radarr.develop.*.linux.tar.gz && rm -f Radarr.develop.*.linux.tar.gz
 git clone https://github.com/rembo10/headphones.git
 
 ##nzbget
-cd /opt
 wget -O - http://nzbget.net/info/nzbget-version-linux.json | sed -n "s/^.*stable-download.*: \"\(.*\)\".*/\1/p" | wget --no-check-certificate -i - -O nzbget-latest-bin-linux.run
 sh nzbget-latest-bin-linux.run
 rm -f nzbget-latest-bin-linux.run
@@ -103,21 +80,21 @@ chown -R www-data:www-data /var/www/Organizr
 ####
 ##Permissions
 chown -R plex:plex /opt
-chown -R plex:plex /downloads
-chown -R plex:plex /cloud
+chown -R plex:plex /down
+chown -R plex:plex /plex
 chmod -R 755 /opt
-chmod -R 755 /downloads
-chmod -R 755 /opt
+chmod -R 755 /down
+chmod -R 755 /plex
 
 ##rclone
-cd /tmp
-wget http://downloads.rclone.org/rclone-current-linux-amd64.zip
-unzip rclone-current-linux-amd64.zip && rm -f rclone-current-linux-amd64.zip
-cd rclone-*-linux-amd64
-sudo cp rclone /usr/bin/
-sudo chown root:root /usr/bin/rclone
-sudo chmod 755 /usr/bin/rclone
-rclone config
+#cd /tmp
+#wget http://downloads.rclone.org/rclone-current-linux-amd64.zip
+#unzip rclone-current-linux-amd64.zip && rm -f rclone-current-linux-amd64.zip
+#cd rclone-*-linux-amd64
+#sudo cp rclone /usr/bin/
+#sudo chown root:root /usr/bin/rclone
+#sudo chmod 755 /usr/bin/rclone
+#rclone config
 
 ####
 ##Reverse Proxy && Iptables
@@ -129,12 +106,12 @@ cp /tmp/htpcserver/reverseproxy /etc/nginx/sites-available/reverseproxy
 ln -s /etc/nginx/sites-available/reverseproxy /etc/nginx/sites-enabled/reverseproxy
 
 ##UFW
-sudo ufw default deny incoming
-sudo ufw allow "Nginx Full"
-sudo ufw allow "ssh"
-sudo ufw allow "OpenSSH"
-sudo ufw allow "WWW Full"
-sudo ufw enable
+#sudo ufw default deny incoming
+#sudo ufw allow "Nginx Full"
+#sudo ufw allow "ssh"
+#sudo ufw allow "OpenSSH"
+#sudo ufw allow "WWW Full"
+#sudo ufw enable
 
 ########
 ####Systemd Files
@@ -156,6 +133,6 @@ sudo systemctl start ombi
 ####
 ##Rclone Scripts
 ####
-touch mount-m.cron mount-tv.cron upload-m.cron upload-tv.cron mount-kidsm.cron mount-kidstv.cron upload-kidsm.cron upload-kidstv.cron
-touch /home/plex-tv-r/mountcheck /home/plex-movies-r/mountcheck /home/plex-kidstv-r/mountcheck /home/plex-kidsm-r/mountcheck
+#touch mount-m.cron mount-tv.cron upload-m.cron upload-tv.cron mount-kidsm.cron mount-kidstv.cron upload-kidsm.cron upload-kidstv.cron
+#touch /home/plex-tv-r/mountcheck /home/plex-movies-r/mountcheck /home/plex-kidstv-r/mountcheck /home/plex-kidsm-r/mountcheck
 
