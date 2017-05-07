@@ -1,12 +1,6 @@
-echo "root:toor" | chpasswd
+#!/bin/bash
 
-######
-##Update
-######
-apt-get update
-apt-get upgrade -y
-apt-get dist-upgrade -y
-apt-get install sudo git 
+echo "root:toor" | chpasswd
 
 ####
 #Git Clone
@@ -134,4 +128,4 @@ sudo systemctl start radarr
 sudo systemctl start nzbget
 sudo systemctl start plexpy
 sudo systemctl start ombi
-
+sudo systemctl restart nginx
