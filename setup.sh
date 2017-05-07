@@ -1,23 +1,37 @@
+echo "root:toor" | chpasswd
+
 ######
 ##Update
 ######
 apt-get update
 apt-get upgrade -y
 apt-get dist-upgrade -y
+apt-get install sudo git 
+
+####
+#Git Clone
+####
+cd /tmp
+git clone https://github.com/p0rtal-tv/htpcserver.git
 
 ######
 ##Add Repos & Keys
 ######
 sudo apt-key adv --keyserver hkp://keyserver.ubuntu.com:80 --recv-keys 3FA7E0328081BFF6A14DA29AA6A19B38D3D831EF
-echo "deb http://download.mono-project.com/repo/debian wheezy main" | sudo tee /etc/apt/sources.list.d/mono-xamarin.list
 sudo apt-key adv --keyserver keyserver.ubuntu.com --recv-keys FDA5DFFC
-echo "deb http://apt.sonarr.tv/ master main" | sudo tee /etc/apt/sources.list.d/sonarr.list
+echo "deb http://download.mono-project.com/repo/debian wheezy main" | sudo tee -a /etc/apt/sources.list
+echo "deb http://apt.sonarr.tv/ master main" | sudo tee -a /etc/apt/sources.list
+echo "deb http://mirrors.digitalocean.com/debian jessie main contrib non-free" | sudo tee -a /etc/apt/sources.list
+echo "deb-src http://mirrors.digitalocean.com/debian jessie main contrib non-free" | sudo tee -a /etc/apt/sources.list
+echo "deb http://mirrors.digitalocean.com/debian jessie-updates main contrib non-free" | sudo tee -a /etc/apt/sources.list
+echo "deb-src http://mirrors.digitalocean.com/debian jessie-updates main contrib non-free" | sudo tee -a /etc/apt/sources.list
+echo "deb-src http://security.debian.org/ jessie/updates main contrib non-free" | sudo tee -a /etc/apt/sources.list
 
 ########
 ###Insall Dependencies
 #########
 apt-get update 
-aptitude install -y git software-properties-common mono-devel unzip zip libmono-cil-dev curl mediainfo nginx php7.0-fpm php7.0-mysql php7.0-sqlite fuse unionfs-fuse
+aptitude install -y git software-properties-common mono-devel unzip zip libmono-cil-dev curl mediainfo nginx php php-fpm php-mysql php-sqlite sqlite3 fuse unionfs-fuse
 
 #######
 ##Make Directories
@@ -30,13 +44,12 @@ mkdir -p /plex/{movies,tv,kidstv,kidsmovies,music}
 ########
 
 ##Plex
-cd /tmp
 bash -c "$(wget -qO - https://raw.githubusercontent.com/mrworf/plexupdate/master/extras/installer.sh)"
 
 ####
 ##Edit Plex User pw
 ####
-passwd plex
+echo "plex:toor" | chpasswd
 usermod -aG sudo plex
 
 
@@ -86,16 +99,6 @@ chmod -R 755 /opt
 chmod -R 755 /down
 chmod -R 755 /plex
 
-##rclone
-#cd /tmp
-#wget http://downloads.rclone.org/rclone-current-linux-amd64.zip
-#unzip rclone-current-linux-amd64.zip && rm -f rclone-current-linux-amd64.zip
-#cd rclone-*-linux-amd64
-#sudo cp rclone /usr/bin/
-#sudo chown root:root /usr/bin/rclone
-#sudo chmod 755 /usr/bin/rclone
-#rclone config
-
 ####
 ##Reverse Proxy && Iptables
 ####
@@ -106,12 +109,14 @@ cp /tmp/htpcserver/reverseproxy /etc/nginx/sites-available/reverseproxy
 ln -s /etc/nginx/sites-available/reverseproxy /etc/nginx/sites-enabled/reverseproxy
 
 ##UFW
-#sudo ufw default deny incoming
-#sudo ufw allow "Nginx Full"
-#sudo ufw allow "ssh"
-#sudo ufw allow "OpenSSH"
-#sudo ufw allow "WWW Full"
-#sudo ufw enable
+sudo ufw default deny incoming
+sudo ufw allow "Nginx Full"
+sudo ufw allow "ssh"
+sudo ufw allow "OpenSSH"
+sudo ufw allow "WWW Full"
+sudo ufw allow 22
+sudo ufw allow 33
+sudo ufw enable
 
 ########
 ####Systemd Files
@@ -119,20 +124,14 @@ ln -s /etc/nginx/sites-available/reverseproxy /etc/nginx/sites-enabled/reversepr
 cp /tmp/htpcserver/systemd/* /etc/systemd/system/
 sudo systemctl enable sonarr
 sudo systemctl enable radarr
-sudo systemctl enable headphones
+#sudo systemctl enable headphones
 sudo systemctl enable nzbget
 sudo systemctl enable plexpy
 sudo systemctl enable ombi 
 sudo systemctl start sonarr
 sudo systemctl start radarr
-sudo systemctl start headphones
+#sudo systemctl start headphones
 sudo systemctl start nzbget
 sudo systemctl start plexpy
 sudo systemctl start ombi
-
-####
-##Rclone Scripts
-####
-#touch mount-m.cron mount-tv.cron upload-m.cron upload-tv.cron mount-kidsm.cron mount-kidstv.cron upload-kidsm.cron upload-kidstv.cron
-#touch /home/plex-tv-r/mountcheck /home/plex-movies-r/mountcheck /home/plex-kidstv-r/mountcheck /home/plex-kidsm-r/mountcheck
 
