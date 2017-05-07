@@ -6,7 +6,7 @@ After=network-online.target
 User=plex
 Group=plex
 Type=simple
-ExecStart=/usr/bin/mono /opt/Ombi/Release/Ombi.exe
+ExecStart=/usr/bin/mono /opt/Ombi/Ombi.exe
 
 [Install]
 WantedBy=multi-user.target
