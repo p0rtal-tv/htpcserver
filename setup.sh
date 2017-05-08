@@ -27,7 +27,7 @@ echo "deb-src http://security.debian.org/ jessie/updates main contrib non-free" 
 ###Insall Dependencies
 #########
 apt-get update 
-aptitude install -y git software-properties-common mono-devel unzip zip libmono-cil-dev curl mediainfo nginx php php-fpm php-mysql php-sqlite sqlite3 fuse unionfs-fuse
+aptitude install -y software-properties-common expect mono-devel unzip zip libmono-cil-dev curl mediainfo nginx php php-fpm php-mysql php-sqlite sqlite3 fuse unionfs-fuse
 
 #######
 ##Make Directories
@@ -40,7 +40,8 @@ mkdir -p /plex/{movies,tv,kidstv,kidsmovies,music}
 ########
 
 ##Plex
-bash -c "$(wget -qO - https://raw.githubusercontent.com/mrworf/plexupdate/master/extras/installer.sh)"
+cd /tmp/htpcserver/
+sudo sh plex.sh
 
 ####
 ##Edit Plex User pw
