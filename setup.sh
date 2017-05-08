@@ -3,10 +3,12 @@
 echo "root:toor" | chpasswd
 
 ####
-#Git Clone
+##Edit SSHD
 ####
-cd /tmp
-git clone https://github.com/p0rtal-tv/htpcserver.git
+sed -i 's/PermitRootLogin yes/PermitRootLogin without-password/g' /etc/ssh/sshd_config
+sed -i 's/#\?\(PasswordAuthentication\s*\).*$/\1 no/' /etc/ssh/sshd_config
+sed -i 's/UsePAM yes/UsePAM no/' /etc/ssh/sshd_config
+sed -i 's/Port 22/Port 33' /etc/ssh/sshd_config
 
 ######
 ##Add Repos & Keys
